@@ -1,0 +1,5 @@
+mutation AnswerQuestion($input: AnswerQuizQuestionInput!) {
+  answerQuizQuestion(input: $input) {
+    ...QuizState
+  }
+}

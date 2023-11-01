@@ -1,0 +1,5 @@
+mutation NextQuestion($input: NextQuestionInput!) {
+  nextQuestion(input: $input) {
+    ...QuizState
+  }
+}

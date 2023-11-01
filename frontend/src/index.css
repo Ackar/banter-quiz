@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #636ac5;
+  opacity: 1;
+  background-size: cover;
+  background-attachment: fixed;
+  background-image: repeating-radial-gradient(circle farthest-side at 0 0, transparent 0, #596bb2 30px), repeating-linear-gradient(#38387055, #5a2012);
+}
+
+@keyframes MOVE-BG {
+  0% {
+    background-position: top; 
+  }
+  50% { 
+    background-position: bottom;
+  }
+  100% { 
+    background-position: top;
+  }
+}

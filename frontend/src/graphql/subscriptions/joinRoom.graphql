@@ -1,0 +1,5 @@
+subscription JoinRoom($input: JoinRoomInput!) {
+  quizState: joinRoom(input: $input) {
+    ...QuizState
+  }
+}

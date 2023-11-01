@@ -1,0 +1,73 @@
+type Query {
+  timeForAQuiz: Boolean!
+}
+
+type Mutation {
+  answerQuizQuestion(input: AnswerQuizQuestionInput!): QuizState!
+  validateAnswer(input: ValidateAnswerInput!): QuizState!
+  nextQuestion(input: NextQuestionInput!): QuizState!
+  createRoom(input: CreateRoomInput!): QuizState!
+  "Restart the game with new questions"
+  restartGame(input: RestartGameInput!): QuizState!
+}
+
+type Subscription {
+  joinRoom(input: JoinRoomInput!): QuizState!
+}
+
+input CreateRoomInput {
+  playerName: String!
+}
+
+input JoinRoomInput {
+  gameId: ID!
+  name: String!
+}
+
+input AnswerQuizQuestionInput {
+  gameId: ID!
+  answerIndex: Int!
+}
+
+input ValidateAnswerInput {
+  gameId: ID!
+  answerIndex: Int!
+}
+
+input NextQuestionInput {
+  gameId: ID!
+}
+
+input RestartGameInput {
+  gameId: ID!
+}
+
+type QuizState {
+  id: ID!
+  players: [Player!]!
+  questionsCount: Int!
+  currentQuestionIndex: Int!
+  currentQuestion: QuizQuestion
+  currentQuestionPickedAnswer: Int
+  currentQuestionCorrectAnswer: Int
+  playersAnswers: [PlayerAnswer!]!
+  host: Boolean!
+  score: Int!
+}
+
+type Player {
+  id: ID!
+  name: String!
+  host: Boolean!
+}
+
+type QuizQuestion {
+  id: ID!
+  question: String!
+  answers: [String!]!
+}
+
+type PlayerAnswer {
+  player: Player!
+  answerIndex: Int!
+}

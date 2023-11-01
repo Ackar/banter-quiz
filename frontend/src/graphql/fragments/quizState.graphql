@@ -1,0 +1,23 @@
+fragment QuizState on QuizState {
+  id
+  host
+  players {
+    ...Player
+  }
+  questionsCount
+  currentQuestionIndex
+  currentQuestion {
+    id
+    question
+    answers
+  }
+  playersAnswers {
+    player {
+      ...Player
+    }
+    answerIndex
+  }
+  currentQuestionCorrectAnswer
+  currentQuestionPickedAnswer
+  score
+}

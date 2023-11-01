@@ -1,0 +1,5 @@
+mutation RestartGame($input: RestartGameInput!) {
+  restartGame(input: $input) {
+    ...QuizState
+  }
+}
