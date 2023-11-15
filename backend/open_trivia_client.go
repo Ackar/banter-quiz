@@ -24,6 +24,7 @@ type Question struct {
 	Question         string
 	CorrectAnswer    string   `json:"correct_answer"`
 	IncorrectAnswers []string `json:"incorrect_answers"`
+	Category         string
 }
 
 type openTriviaResponse struct {

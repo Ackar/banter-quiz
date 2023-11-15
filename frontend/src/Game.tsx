@@ -1,7 +1,7 @@
 import { useParams } from "react-router";
 import Content from "./components/Content";
 import {
-  Player,
+  PlayerFragment,
   useAnswerQuestionMutation,
   useJoinRoomSubscription,
   useNextQuestionMutation,
@@ -40,7 +40,7 @@ export default function Game() {
     return <></>;
   }
 
-  const answersPlayers = new Map<number, Player[]>();
+  const answersPlayers = new Map<number, PlayerFragment[]>();
   data.quizState.playersAnswers.map((a) => {
     // TODO: make that better
     answersPlayers.set(a.answerIndex, [
@@ -66,6 +66,17 @@ export default function Game() {
             <img src="https://media.giphy.com/media/2UCt7zbmsLoCXybx6t/giphy-downsized.gif" />
           ) : (
             <img src="https://media.giphy.com/media/jQDozgWeDXUoQZ1htF/giphy.gif" />
+          )}
+          {data.quizState.currentQuestionIndex > 0 && (
+            <div className="font-[Inter] bg-slate-600 px-2 py-2 rounded">
+              <div className="text-sm">Your score (visible only to you)</div>
+              <div>
+                {data.quizState.me.score}/
+                {data.quizState.currentQuestionCorrectAnswer !== null
+                  ? data.quizState.currentQuestionIndex + 1
+                  : data.quizState.currentQuestionIndex}
+              </div>
+            </div>
           )}
           {data.quizState.host && (
             <button
@@ -173,6 +184,17 @@ export default function Game() {
             ➡️ Next question
           </button>
         )}
+      {data.quizState.currentQuestionIndex > 0 && (
+        <div className="font-[Inter] bg-slate-600 px-2 py-2 rounded">
+          <div className="text-xs">Your score (visible only to you)</div>
+          <div>
+            {data.quizState.me.score}/
+            {data.quizState.currentQuestionCorrectAnswer !== null
+              ? data.quizState.currentQuestionIndex + 1
+              : data.quizState.currentQuestionIndex}
+          </div>
+        </div>
+      )}
       <h2 className="">Players</h2>
       <div className="flex flex-row flex-wrap gap-2">
         {data.quizState.players.map((player) => (

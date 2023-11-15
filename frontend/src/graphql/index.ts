@@ -72,6 +72,7 @@ export type Player = {
   host: Scalars['Boolean'];
   id: Scalars['ID'];
   name: Scalars['String'];
+  score: Scalars['Int'];
 };
 
 export type PlayerAnswer = {
@@ -100,6 +101,7 @@ export type QuizState = {
   currentQuestionPickedAnswer?: Maybe<Scalars['Int']>;
   host: Scalars['Boolean'];
   id: Scalars['ID'];
+  me: Player;
   players: Array<Player>;
   playersAnswers: Array<PlayerAnswer>;
   questionsCount: Scalars['Int'];
@@ -132,42 +134,42 @@ export type _Service = {
 
 export type PlayerFragment = { __typename?: 'Player', id: string, name: string, host: boolean };
 
-export type QuizStateFragment = { __typename?: 'QuizState', id: string, host: boolean, questionsCount: number, currentQuestionIndex: number, currentQuestionCorrectAnswer?: number | null, currentQuestionPickedAnswer?: number | null, score: number, players: Array<{ __typename?: 'Player', id: string, name: string, host: boolean }>, currentQuestion?: { __typename?: 'QuizQuestion', id: string, question: string, answers: Array<string> } | null, playersAnswers: Array<{ __typename?: 'PlayerAnswer', answerIndex: number, player: { __typename?: 'Player', id: string, name: string, host: boolean } }> };
+export type QuizStateFragment = { __typename?: 'QuizState', id: string, host: boolean, questionsCount: number, currentQuestionIndex: number, currentQuestionCorrectAnswer?: number | null, currentQuestionPickedAnswer?: number | null, score: number, me: { __typename?: 'Player', score: number, id: string, name: string, host: boolean }, players: Array<{ __typename?: 'Player', id: string, name: string, host: boolean }>, currentQuestion?: { __typename?: 'QuizQuestion', id: string, question: string, answers: Array<string> } | null, playersAnswers: Array<{ __typename?: 'PlayerAnswer', answerIndex: number, player: { __typename?: 'Player', id: string, name: string, host: boolean } }> };
 
 export type AnswerQuestionMutationVariables = Exact<{
   input: AnswerQuizQuestionInput;
 }>;
 
 
-export type AnswerQuestionMutation = { __typename?: 'Mutation', answerQuizQuestion: { __typename?: 'QuizState', id: string, host: boolean, questionsCount: number, currentQuestionIndex: number, currentQuestionCorrectAnswer?: number | null, currentQuestionPickedAnswer?: number | null, score: number, players: Array<{ __typename?: 'Player', id: string, name: string, host: boolean }>, currentQuestion?: { __typename?: 'QuizQuestion', id: string, question: string, answers: Array<string> } | null, playersAnswers: Array<{ __typename?: 'PlayerAnswer', answerIndex: number, player: { __typename?: 'Player', id: string, name: string, host: boolean } }> } };
+export type AnswerQuestionMutation = { __typename?: 'Mutation', answerQuizQuestion: { __typename?: 'QuizState', id: string, host: boolean, questionsCount: number, currentQuestionIndex: number, currentQuestionCorrectAnswer?: number | null, currentQuestionPickedAnswer?: number | null, score: number, me: { __typename?: 'Player', score: number, id: string, name: string, host: boolean }, players: Array<{ __typename?: 'Player', id: string, name: string, host: boolean }>, currentQuestion?: { __typename?: 'QuizQuestion', id: string, question: string, answers: Array<string> } | null, playersAnswers: Array<{ __typename?: 'PlayerAnswer', answerIndex: number, player: { __typename?: 'Player', id: string, name: string, host: boolean } }> } };
 
 export type CreateRoomMutationVariables = Exact<{
   input: CreateRoomInput;
 }>;
 
 
-export type CreateRoomMutation = { __typename?: 'Mutation', createRoom: { __typename?: 'QuizState', id: string, host: boolean, questionsCount: number, currentQuestionIndex: number, currentQuestionCorrectAnswer?: number | null, currentQuestionPickedAnswer?: number | null, score: number, players: Array<{ __typename?: 'Player', id: string, name: string, host: boolean }>, currentQuestion?: { __typename?: 'QuizQuestion', id: string, question: string, answers: Array<string> } | null, playersAnswers: Array<{ __typename?: 'PlayerAnswer', answerIndex: number, player: { __typename?: 'Player', id: string, name: string, host: boolean } }> } };
+export type CreateRoomMutation = { __typename?: 'Mutation', createRoom: { __typename?: 'QuizState', id: string, host: boolean, questionsCount: number, currentQuestionIndex: number, currentQuestionCorrectAnswer?: number | null, currentQuestionPickedAnswer?: number | null, score: number, me: { __typename?: 'Player', score: number, id: string, name: string, host: boolean }, players: Array<{ __typename?: 'Player', id: string, name: string, host: boolean }>, currentQuestion?: { __typename?: 'QuizQuestion', id: string, question: string, answers: Array<string> } | null, playersAnswers: Array<{ __typename?: 'PlayerAnswer', answerIndex: number, player: { __typename?: 'Player', id: string, name: string, host: boolean } }> } };
 
 export type NextQuestionMutationVariables = Exact<{
   input: NextQuestionInput;
 }>;
 
 
-export type NextQuestionMutation = { __typename?: 'Mutation', nextQuestion: { __typename?: 'QuizState', id: string, host: boolean, questionsCount: number, currentQuestionIndex: number, currentQuestionCorrectAnswer?: number | null, currentQuestionPickedAnswer?: number | null, score: number, players: Array<{ __typename?: 'Player', id: string, name: string, host: boolean }>, currentQuestion?: { __typename?: 'QuizQuestion', id: string, question: string, answers: Array<string> } | null, playersAnswers: Array<{ __typename?: 'PlayerAnswer', answerIndex: number, player: { __typename?: 'Player', id: string, name: string, host: boolean } }> } };
+export type NextQuestionMutation = { __typename?: 'Mutation', nextQuestion: { __typename?: 'QuizState', id: string, host: boolean, questionsCount: number, currentQuestionIndex: number, currentQuestionCorrectAnswer?: number | null, currentQuestionPickedAnswer?: number | null, score: number, me: { __typename?: 'Player', score: number, id: string, name: string, host: boolean }, players: Array<{ __typename?: 'Player', id: string, name: string, host: boolean }>, currentQuestion?: { __typename?: 'QuizQuestion', id: string, question: string, answers: Array<string> } | null, playersAnswers: Array<{ __typename?: 'PlayerAnswer', answerIndex: number, player: { __typename?: 'Player', id: string, name: string, host: boolean } }> } };
 
 export type RestartGameMutationVariables = Exact<{
   input: RestartGameInput;
 }>;
 
 
-export type RestartGameMutation = { __typename?: 'Mutation', restartGame: { __typename?: 'QuizState', id: string, host: boolean, questionsCount: number, currentQuestionIndex: number, currentQuestionCorrectAnswer?: number | null, currentQuestionPickedAnswer?: number | null, score: number, players: Array<{ __typename?: 'Player', id: string, name: string, host: boolean }>, currentQuestion?: { __typename?: 'QuizQuestion', id: string, question: string, answers: Array<string> } | null, playersAnswers: Array<{ __typename?: 'PlayerAnswer', answerIndex: number, player: { __typename?: 'Player', id: string, name: string, host: boolean } }> } };
+export type RestartGameMutation = { __typename?: 'Mutation', restartGame: { __typename?: 'QuizState', id: string, host: boolean, questionsCount: number, currentQuestionIndex: number, currentQuestionCorrectAnswer?: number | null, currentQuestionPickedAnswer?: number | null, score: number, me: { __typename?: 'Player', score: number, id: string, name: string, host: boolean }, players: Array<{ __typename?: 'Player', id: string, name: string, host: boolean }>, currentQuestion?: { __typename?: 'QuizQuestion', id: string, question: string, answers: Array<string> } | null, playersAnswers: Array<{ __typename?: 'PlayerAnswer', answerIndex: number, player: { __typename?: 'Player', id: string, name: string, host: boolean } }> } };
 
 export type ValidateAnswerMutationVariables = Exact<{
   input: ValidateAnswerInput;
 }>;
 
 
-export type ValidateAnswerMutation = { __typename?: 'Mutation', validateAnswer: { __typename?: 'QuizState', id: string, host: boolean, questionsCount: number, currentQuestionIndex: number, currentQuestionCorrectAnswer?: number | null, currentQuestionPickedAnswer?: number | null, score: number, players: Array<{ __typename?: 'Player', id: string, name: string, host: boolean }>, currentQuestion?: { __typename?: 'QuizQuestion', id: string, question: string, answers: Array<string> } | null, playersAnswers: Array<{ __typename?: 'PlayerAnswer', answerIndex: number, player: { __typename?: 'Player', id: string, name: string, host: boolean } }> } };
+export type ValidateAnswerMutation = { __typename?: 'Mutation', validateAnswer: { __typename?: 'QuizState', id: string, host: boolean, questionsCount: number, currentQuestionIndex: number, currentQuestionCorrectAnswer?: number | null, currentQuestionPickedAnswer?: number | null, score: number, me: { __typename?: 'Player', score: number, id: string, name: string, host: boolean }, players: Array<{ __typename?: 'Player', id: string, name: string, host: boolean }>, currentQuestion?: { __typename?: 'QuizQuestion', id: string, question: string, answers: Array<string> } | null, playersAnswers: Array<{ __typename?: 'PlayerAnswer', answerIndex: number, player: { __typename?: 'Player', id: string, name: string, host: boolean } }> } };
 
 export type TimeForAQuizQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -179,7 +181,7 @@ export type JoinRoomSubscriptionVariables = Exact<{
 }>;
 
 
-export type JoinRoomSubscription = { __typename?: 'Subscription', quizState: { __typename?: 'QuizState', id: string, host: boolean, questionsCount: number, currentQuestionIndex: number, currentQuestionCorrectAnswer?: number | null, currentQuestionPickedAnswer?: number | null, score: number, players: Array<{ __typename?: 'Player', id: string, name: string, host: boolean }>, currentQuestion?: { __typename?: 'QuizQuestion', id: string, question: string, answers: Array<string> } | null, playersAnswers: Array<{ __typename?: 'PlayerAnswer', answerIndex: number, player: { __typename?: 'Player', id: string, name: string, host: boolean } }> } };
+export type JoinRoomSubscription = { __typename?: 'Subscription', quizState: { __typename?: 'QuizState', id: string, host: boolean, questionsCount: number, currentQuestionIndex: number, currentQuestionCorrectAnswer?: number | null, currentQuestionPickedAnswer?: number | null, score: number, me: { __typename?: 'Player', score: number, id: string, name: string, host: boolean }, players: Array<{ __typename?: 'Player', id: string, name: string, host: boolean }>, currentQuestion?: { __typename?: 'QuizQuestion', id: string, question: string, answers: Array<string> } | null, playersAnswers: Array<{ __typename?: 'PlayerAnswer', answerIndex: number, player: { __typename?: 'Player', id: string, name: string, host: boolean } }> } };
 
 export const PlayerFragmentDoc = gql`
     fragment Player on Player {
@@ -192,6 +194,10 @@ export const QuizStateFragmentDoc = gql`
     fragment QuizState on QuizState {
   id
   host
+  me {
+    ...Player
+    score
+  }
   players {
     ...Player
   }

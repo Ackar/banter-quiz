@@ -13,16 +13,20 @@ import (
 	"github.com/graph-gophers/graphql-go"
 )
 
-type resolver struct {
-	games            map[graphql.ID]*QuizState
-	gamesLock        sync.Mutex
-	openTriviaClient *OpenTriviaClient
+type QuestionGetter interface {
+	GetQuestions() ([]Question, error)
 }
 
-func newResolver(openTrivia *OpenTriviaClient) *resolver {
+type resolver struct {
+	games          map[graphql.ID]*QuizState
+	gamesLock      sync.Mutex
+	questionGetter QuestionGetter
+}
+
+func newResolver(questionGetter QuestionGetter) *resolver {
 	return &resolver{
-		games:            make(map[graphql.ID]*QuizState),
-		openTriviaClient: openTrivia,
+		games:          make(map[graphql.ID]*QuizState),
+		questionGetter: questionGetter,
 	}
 }
 
@@ -43,6 +47,16 @@ type QuizState struct {
 	listenersLock sync.Mutex
 	playersLock   sync.Mutex
 	answersLock   sync.Mutex
+}
+
+func (q *QuizState) Me(ctx context.Context) *Player {
+	userID := userIDFromContext(ctx)
+	for _, p := range q.Players {
+		if p.ID == graphql.ID(userID) {
+			return &p
+		}
+	}
+	return nil
 }
 
 func (q *QuizState) CurrentQuestion() *QuizQuestion {
@@ -105,7 +119,7 @@ func (q *QuizState) deletePlayer(userID string) {
 		return
 	}
 	// If the player has rejoined don't delete it
-	if time.Since(q.Players[idx].joinedAt) < 2*time.Second {
+	if time.Since(q.Players[idx].joinedAt) < 3*time.Second {
 		return
 	}
 	slog.Info("deleting player", slog.String("player", userID))
@@ -128,9 +142,10 @@ func (q *QuizState) deletePlayer(userID string) {
 }
 
 type Player struct {
-	ID   graphql.ID
-	Name string
-	Host bool
+	ID    graphql.ID
+	Name  string
+	Host  bool
+	Score int32
 
 	joinedAt time.Time
 }
@@ -220,7 +235,7 @@ func (r *resolver) CreateRoom(ctx context.Context, args struct {
 }) (*QuizState, error) {
 	userID := userIDFromContext(ctx)
 
-	questions, err := r.openTriviaClient.GetQuestions()
+	questions, err := r.questionGetter.GetQuestions()
 	if err != nil {
 		slog.Error("error fetching questions", slog.Any("err", err))
 		return nil, fmt.Errorf("error fetching questions")
@@ -259,6 +274,11 @@ func (r *resolver) AnswerQuizQuestion(ctx context.Context, args struct {
 	userID := userIDFromContext(ctx)
 
 	game := r.games[args.Input.GameID]
+
+	// Ignore if the question is already answered
+	if game.CurrentQuestionPickedAnswer != nil {
+		return game, nil
+	}
 
 	if args.Input.AnswerIndex < 0 ||
 		int(args.Input.AnswerIndex) >= len(game.CurrentQuestion().Answers) {
@@ -309,6 +329,18 @@ func (r *resolver) ValidateAnswer(ctx context.Context, args struct {
 		game.Score++
 	}
 
+	answersMap := make(map[graphql.ID]int32)
+	for _, ans := range game.PlayersAnswers {
+		answersMap[ans.playerID] = ans.AnswerIndex
+	}
+
+	for i := range game.Players {
+		ans, ok := answersMap[game.Players[i].ID]
+		if ok && ans == correctIdx {
+			game.Players[i].Score++
+		}
+	}
+
 	go game.updateListeners()
 
 	return game, nil
@@ -349,7 +381,7 @@ func (r *resolver) RestartGame(ctx context.Context, args struct {
 
 	slog.Info("restarting game", slog.String("game-id", string(game.ID)))
 
-	questions, err := r.openTriviaClient.GetQuestions()
+	questions, err := r.questionGetter.GetQuestions()
 	if err != nil {
 		return nil, fmt.Errorf("error fetching questions: %w", err)
 	}
@@ -362,6 +394,9 @@ func (r *resolver) RestartGame(ctx context.Context, args struct {
 	game.questions = questions
 	game.QuestionsCount = int32(len(questions))
 	game.randNumber = time.Now().UnixMilli()
+	for i := range game.Players {
+		game.Players[i].Score = 0
+	}
 
 	go game.updateListeners()
 

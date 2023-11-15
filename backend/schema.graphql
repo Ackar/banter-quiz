@@ -44,6 +44,7 @@ input RestartGameInput {
 
 type QuizState {
   id: ID!
+  me: Player!
   players: [Player!]!
   questionsCount: Int!
   currentQuestionIndex: Int!
@@ -59,6 +60,7 @@ type Player {
   id: ID!
   name: String!
   host: Boolean!
+  score: Int!
 }
 
 type QuizQuestion {

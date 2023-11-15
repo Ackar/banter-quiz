@@ -24,8 +24,9 @@ var schema string
 var frontend embed.FS
 
 func main() {
-	openTrivia := NewOpenTriviaClient()
-	r := newResolver(openTrivia)
+	triviaAPI := NewTriviaAPIClient()
+
+	r := newResolver(triviaAPI)
 	schema := graphql.MustParseSchema(schema, r, graphql.UseFieldResolvers())
 
 	mux := http.NewServeMux()

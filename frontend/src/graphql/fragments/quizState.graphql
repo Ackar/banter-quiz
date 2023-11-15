@@ -1,6 +1,10 @@
 fragment QuizState on QuizState {
   id
   host
+  me {
+    ...Player
+    score
+  }
   players {
     ...Player
   }

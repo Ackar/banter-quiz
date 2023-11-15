@@ -15,6 +15,7 @@ function App() {
             background:
               "url(https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYXIxd2E0eGRpMjgyNzk1N2pnOXQxeTEya3Rld21tZzVmbXdvejhlciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ncWIVXM13MFX2/giphy.gif)",
             backgroundClip: "text",
+            WebkitBackgroundClip: "text",
             backgroundSize: "100%",
             color: "transparent",
             backgroundPosition: "center 5%",
